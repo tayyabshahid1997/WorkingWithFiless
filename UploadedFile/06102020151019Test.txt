@@ -1,0 +1,23 @@
+[HttpPost]
+        public ActionResult DownloadStaffDocuments()
+        {
+            string path = Server.MapPath("~/Content/StaffDocuments");
+            bool exists = Directory.Exists(path);//check folder exsit or not
+            string[] Filenames = Directory.GetFiles(path);
+            List<string> directoryFileNames = Directory.GetFiles(path).ToList();
+            string staffName ="Awais";
+            using (ZipFile zip = new ZipFile())
+            {
+                if (exists)
+                {
+                    if (directoryFileNames.Count!=0)
+                    {
+                        zip.AddFiles(directoryFileNames, "");
+                        //Generate zip file folder into loation
+                        zip.Save(path + staffName + ".zip");//Folder where we want to save zip file
+                       // zip.Save(@"F:\Awais\Login\Projectzip.zip"); //Folder where we want to save zip file
+                    }
+                }
+            }
+            return Json(new { staffId = 1, staffName = staffName }, JsonRequestBehavior.AllowGet);
+        }

@@ -1,0 +1,2238 @@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string businessName = "Pharmaceutical ERP";
+    string adminImageSrc = "/Content/dummy.png";
+    string bgImageSrc = "/Content/img/download.jpg";
+    string adminName = "Admin";
+    string bgLogo = "/Content/img/logo.png";
+    string bgColor = "#584677";
+    ViewBag.Title = "Second Level Account";
+
+}
+
+
+    <style>
+
+
+       .heading-1 {
+        position: relative;
+        text-align: center;
+    }
+
+        .heading-1:before {
+            content: "";
+            display: block;
+            border-top: solid 2px @bgColor;
+            width: 100%;
+            height: 2px;
+            position: absolute;
+            top: 50%;
+            z-index: 0;
+        }
+
+        .heading-1 span {
+            background: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+
+
+@model PharmacyERP.Models.clsCashbank
+
+<div class="mySelect" style="overflow: hidden;padding: 0px">
+    <main id="js-page-content" role="main" class="page-content">
+        <div class="row">
+            <div class="col-lg-6" style="margin-top:4px">
+
+
+
+
+            </div>
+            <div class="col-md-12" style="display:flex">
+                <table style="width:100%">
+                    <tr>
+                        <th>
+                            <ol class="breadcrumb breadcrumb-sm breadcrumb-arrow">
+                                <li>
+                                    <a href="javascript:void(0)">
+                                        <i class="fal fa-clipboard"></i>
+                                        &nbsp;
+                                        <span class="hidden-md-down">Vouchers</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0)">
+                                        <i class="fal fa-list-ol"></i>
+                                        &nbsp;
+                                        <span class="hidden-md-down">Cash Paymnet</span>
+                                    </a>
+                                </li>
+                            </ol>
+                        </th>
+                        <th style="text-align:right">
+                            <h6 class="js-get-date" style="margin-top: -7px;"></h6>
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+
+        @using (Html.BeginForm("InsertUpdateCashPayment", "ChartofAccount", FormMethod.Post, new { id = "popupForm", @class = "smart-form custome-class-form", @novalidate = "novalidate", enctype = "multipart/form-data" }))
+        {
+
+
+
+            <fieldset style="padding:1.25rem">
+                <div class="alertDiv">
+                </div>
+
+
+
+                @*Taking Attributes and hidden Attributes from the controller no Starts *@
+
+                <input type="hidden" id="IsNeWOrEdit" name="IsNeWOrEdit" value="@Model.IsNeWOrEdit" />
+                <input type="hidden" id="ShowProjectinVoucher" name="ShowProjectinVoucher" value="@Model.ShowProjectinVoucher" />
+                @{
+                    string hiddenMutliCurrency = "";
+                    string hiddenShowProject = "";
+                    string readOnly = "";
+                }
+                @if (Model.MultiCurrency == true)
+                {
+                    hiddenMutliCurrency = "";
+                    readOnly = "disabled";
+                }
+                else
+                {
+                    hiddenMutliCurrency = "hidden";
+                    readOnly = "";
+                }
+                @if (Model.ShowProjectinVoucher == true)
+                {
+                    hiddenShowProject = "";
+                }
+                else
+                {
+                    hiddenShowProject = "hidden";
+                }
+
+                <input type="hidden" id="HiddenDetailCode" name="HiddenDetailCode" value="@Model.DetailCode" />
+                <input type="hidden" id="HiddenDetailName" name="HiddenDetailName" value="@Model.DetailName" />
+
+                <input type="hidden" id="HiddenCurrencyId" name="HiddenCurrencyId" value="@Model.CurrencyId" />
+                <input type="hidden" id="HiddenCurrencyName" name="HiddenCurrencyName" value="@Model.CurrencyName" />
+
+                <input type="hidden" id="HiddenProjectId" name="HiddenProjectId" value="@Model.ProjectId" />
+                <input type="hidden" id="HiddenProjectName" name="HiddenProjectName" value="@Model.ProjectName" />
+
+                <input type="hidden" id="HiddenDescription" name="HiddenDescription" value="@Model.Description" />
+                <input type="hidden" id="HiddenTr" value="0" />
+                <input type="hidden" id="CurrencyCalculation" value="" />
+                <input type="hidden" id="LineCurrencyCalculation" value="" />
+
+
+                @*Taking Attributes from the controller no Starts *@
+
+
+
+
+
+
+                <div class="panel">
+
+
+
+
+                    @*Header of The main Panel Starts*@
+                    <div class="panel-hdr bg-primary-500 bg-info-gradient" role="heading">
+
+
+                        @if (Model.VoucherNo != "")
+                        {
+                            <h2>Edit Cash Payment</h2>
+                        }
+                        else
+                        {
+                            <h2>Add Cash Payment</h2>
+                        }
+                    </div>
+
+
+                    @*Header of The main Panel Ends*@
+
+
+
+
+
+                    @*Voucher no Starts *@
+
+                    <b>
+                        <label style="text-align:left;margin-left:10px;margin-top:10px;">
+                            Voucher No :
+                            @if (Model.IsNeWOrEdit == "Save")
+                            {
+                                <label style="color:green" id="VoucherNo"></label>
+                            }
+                            else
+                            {
+                                <label style="color:green" id="VoucherNo">@Model.VoucherNo</label>
+                            }
+                        </label>
+                    </b>
+                    @*Voucher no  Ends*@
+
+
+                    <div class="panel-container show">
+                        <div class="panel-content">
+
+                            @*Row  no 1 Starts*@
+                            <div class="row" style="margin-top:15px">
+
+
+                                                <div class="col-md-3" style="margin-top:15px">
+                            <table class="" style="width: 100%;">
+                                <tr>
+                                    <td style="width: 80%;">
+                                        <label class="form-label">Cash Account(*)</label>
+                                        <div class="input-group">
+                                            @Html.DropDownListFor(model => model.DetailCode, Enumerable.Empty<SelectListItem>(), new { @id = "DetailCode1" })
+                                        </div>
+                                    </td>
+
+                                    <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                        <a href="/defaultgl/defaultglindex" target="_blank" class="btn btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Cash Account">
+                                            <i class="fal fa-plus" style="margin-left:2px"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Reference No</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.ReferenceNo, new { @placeholder = "ReferenceNo", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Cheque Number</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.ChequeNo, new { @placeholder = "Cheque Number", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Voucher Date</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-calendar"></i>
+                                            </span>
+                                        </div>
+
+
+                                        @Html.TextBoxFor(a => a.VoucherDate, new { @type = "datetime-local", @class = "form-control", @Value = Model.VoucherDate.HasValue ? Model.VoucherDate.GetValueOrDefault().ToString("yyyy-MM-ddTHH:mm:ss") : "" })
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            @*Row  no 1 Starts*@
+
+
+
+
+                            @*Row  no 2 Starts*@
+                            <div class="row" style="margin-top:15px">
+
+
+                                <div class="col-md-3" style="margin-top:15px" @hiddenMutliCurrency>
+                                    <table class="" style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                <label class="form-label">Select Currency(*)</label>
+                                                <div class="input-group">
+                                                    @Html.DropDownListFor(model => model.CurrencyId, Enumerable.Empty<SelectListItem>(), new { })
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                                <a href="/currency/currencyindex" target="_blank" class="btn btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Currency">
+                                                    <i class="fal fa-plus" style="margin-left:2px"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+
+
+
+                                <div class="col-md-3" style="margin-top:15px" @hiddenMutliCurrency>
+                                    <label class="form-label">Exchange Rate</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-money-bill-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.ExchangeRate, new { @placeholder = "Exchange Rate", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3" style="margin-top:15px" @hiddenMutliCurrency>
+                                    <label class="form-label">Currency Credit</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.CurrencyCredit, new { @placeholder = "Currency Credit", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Credit</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-money-bill-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.Credit, new { @placeholder = "Credit", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*Row  no 2 ends*@
+
+
+
+                            @*Row  no 3 Starts*@
+                            <div class="row" style="margin-top:15px">
+                                <div class="col-md-3" style="margin-top:15px" @hiddenShowProject>
+                                    <table class="" style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                <label class="form-label">Select Project(*)</label>
+                                                <div class="input-group">
+                                                    @Html.DropDownListFor(model => model.ProjectId, Enumerable.Empty<SelectListItem>(), new { })
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                                <a href="/project/projectindex" target="_blank" class="btn btnP btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Project">
+                                                    <i class="fal fa-plus" style="margin-left:2px"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Paid By</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-user-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.PaidBy, new { @placeholder = "Paid By", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <label class="form-label">Recieved By</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-user-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.RecievedBy, new { @placeholder = "Recieved By", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3" style="margin-top:15px">
+                                    <b>
+                                        <label class="checkbox pull-left" style="margin-top:30px">
+                                            <input id="DefaultVoucher" type="checkbox" name="DefaultVoucher" checked><i></i>
+                                            <span style="font-size:11px">Default Voucher</span>
+                                        </label>
+                                    </b>
+                                </div>
+                            </div>
+                            @*Row  no 3 ends*@
+
+
+
+                            @*Row  no 4 Starts*@
+                            <div class="row" style="margin-top:15px">
+                                <section class="col col-md-12">
+                                    <label class="form-label">Remarks</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextAreaFor(a => a.Remarks, new { @placeholder = "Remarks", @class = "form-control", @maxlength = "500", @rows = "3" })
+                                    </div>
+                                </section>
+                            </div>
+                            @*Row  no 4 ends*@
+
+
+
+
+                            @*Row  no 1 Line Entry Starts*@
+
+
+                            <h1 class="heading-1" style="margin-top: 50px; margin-bottom: 20px; color:@bgColor;font-weight:bold "><span>Voucher Detail</span></h1>
+
+
+
+
+                            <div class="row" style="margin-top:15px">
+
+                                <div class="col-md-4" style="margin-top:15px">
+                                    <table class="" style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                <label class="form-label">Select Paid To Account(*)</label>
+                                                <div class="input-group" id="LineDetailDiv">
+                                                    @Html.DropDownListFor(model => model.DetailCode, Enumerable.Empty<SelectListItem>(), new { })
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                                <a href="/chartofaccount/AccountDetailIndex" target="_blank" class="btn btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Account">
+                                                    <i class="fal fa-plus" style="margin-left:2px"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+
+
+
+                                <div class="col-md-4" style="margin-top:20px;margin-left:15px;">
+                                    <label class="" style="text-align:left;margin-top:20px;margin-left:15px">
+                                        <span style="font-size: 15px">Previous Bal:</span>
+                                        <span style="font-size: 16px; margin-left: 2px; color: green;" id="PreviousBalance">0.00</span>
+                                    </label>
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div class="col col-3" style="margin-top:15px">
+                                    <table class="" style="">
+                                        <tr>
+                                            <td style="width:50%;padding:2px" id="LineDebitTd">
+
+                                                <label class="form-label" for="simpleinput">
+                                                    <i class="icon-prepend fa fa-money"></i>
+                                                    <input type="text" name="LineDebit" class="form-control" id="LineDebit" placeholder="Debit" autocomplete="off" @readOnly />
+                                                </label>
+                                            </td>
+                                            <td style="width: 50%; padding: 2px" id="LineCreditTd" hidden>
+                                                <label class="form-label" for="simpleinput ">
+                                                    <i class="icon-prepend fa fa fa-money"></i>
+                                                    <input type="text" name="LineCredit" class="form-control" id="LineCredit" placeholder="Credit" autocomplete="off" @readOnly />
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            @*Row  no 1 Line Entry ends*@
+
+
+                            @*Row  no 2 Line Entry Starts*@
+
+                            <div class="row" style="padding-bottom: 15px;margin-top:-5px">
+
+
+
+
+                                <div class="col-md-4" style="margin-top:15px">
+                                    <label class="form-label">Remarks</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.LineRemarks, new { @placeholder = "LineRemarks", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4" style="margin-top:15px">
+                                    <label class="form-label">Cheque Number</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-info"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.LineChequeNo, new { @placeholder = "Cheque Number", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-3" style="margin-top:25px;margin-left:20px;">
+                                    <b>
+                                        <label class="checkbox" style="margin-top:20px">
+                                            <input id="TaxCheckbox" type="checkbox" name="TaxCheckbox"><i></i>
+                                            Tax
+                                        </label>
+                                    </b>
+                                </div>
+
+
+
+                            </div>
+
+                            @*Row  no 2 Line Entry Ends*@
+
+
+                            @*Row  no 3 Line Entry Starts*@
+
+                            <div class="row" style="margin-top:15px">
+
+
+                                <div class="col-md-4" style="margin-top:15px" @hiddenMutliCurrency>
+                                    <table class="" style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                <label class="form-label">Select Currency(*)</label>
+                                                <div class="input-group">
+                                                    @Html.DropDownListFor(model => model.CurrencyId, Enumerable.Empty<SelectListItem>(), new { @id = "CurrencyId1" })
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                                <a href="/currency/currencyindex" target="_blank" class="btn btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Currency">
+                                                    <i class="fal fa-plus" style="margin-left:2px"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+
+
+
+
+                                <div class="col-md-2" style="margin-top:15px" id="CurrencyCreditSection" hidden @hiddenMutliCurrency>
+                                    <label class="form-label">Currency Credit</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-money-bill-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.LineCurrencyCredit, new { @placeholder = "Currency Credit", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-2" style="margin-top:15px" @hiddenMutliCurrency id="CurrencyDebitSection">
+                                    <label class="form-label">Currency Debit</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-money-bill-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.LineCurrencyDebit, new { @placeholder = "Currency Debit", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                                <div class="col-md-2" style="margin-top:15px" @hiddenMutliCurrency>
+                                    <label class="form-label">Exchange Rate</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-money-bill-alt"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.LineExchangeRate, new { @placeholder = "Exchange Rate", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            @*Row  no 3 Line Entry Ends*@
+
+
+
+
+                            @*Row  no 5 Line Entry Starts for Tax*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="row" id="taxRow" style="padding-bottom: 15px;" hidden>
+
+
+                                <div class="col-md-4" style="margin-top:15px">
+                                    <table class="" style="width: 100%;">
+                                        <tr>
+                                            <td style="width: 80%;">
+                                                <label class="form-label">Select Tax</label>
+                                                <div class="input-group">
+                                                    @Html.DropDownListFor(model => model.TaxId, Enumerable.Empty<SelectListItem>(), new { })
+                                                </div>
+                                            </td>
+
+                                            <td style="width: 2%;margin-left: -5px;padding-top:8.7px;">
+                                                <a href="/taxinformation/taxinformation" target="_blank" class="btn btn-primary" style="margin-top:15px;color:#fff;padding:8px;margin-left: -4px;background-color:#aaaaaa !important;border-color:#aaaaaa !important;" title="Add New Tax">
+                                                    <i class="fal fa-plus" style="margin-left:2px"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+
+
+
+                                <div class="col-md-2" style="margin-top:15px">
+                                    <label class="form-label">Tax Rate</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fal fa-percent"></i>
+                                            </span>
+                                        </div>
+                                        @Html.TextBoxFor(a => a.TaxRate, new { @placeholder = "Tax Rate", @class = "form-control", @maxlength = "500" })
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-2" style="margin-top:22px;margin-left:30px;">
+
+
+                                    <label style="text-align:center;margin-top:18px">
+                                        <span style="font-size: 20px">Tax Value:</span>
+                                        <span style="font-size: 20px; margin-left: 8px; color: green;" id="TaxValue">0</span>
+                                    </label>
+
+                                </div>
+
+
+                                <div class="col-md-2" style="margin-top:22px;margin-left:30px;">
+
+
+                                    <label style="text-align:center;margin-top:18px">
+                                        <span style="font-size: 20px" id="NetLbl">Net Debit:</span>
+                                        <span style="font-size: 20px; margin-left: 8px; color: green;" id="Net">0</span>
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            @*Row  no 5 Line Entry Ends for Tax*@
+
+                            <center>
+                                <a title="Add Detail" id="btnAddVoucherDetail" href="javascript:void(0)" class="btn btn-primary" style="/* width: 123px; */ margin-top: 20px; /* height:39px; */ color: white; margin-bottom: 8px; /* line-height:26px; */ border-radius: 5px; padding: 9px; padding-left: 19px; padding-right: 19px;">
+                                    <i class="fal fa-plus-circle"></i> <span class="btnLineSpan">Add</span>
+                                </a>
+                                <a title="Cancel" id="btnCancelDetail" href="javascript:void(0)" class="btn btn-default" style="/* width: 123px; */ margin-top: 20px; /* height:39px; */ color: black; margin-bottom: 8px; /* line-height:26px; */ border-radius: 5px; padding: 9px; padding-left: 19px; padding-right: 19px;" hidden>
+                                    Cancel
+                                </a>
+                            </center>
+
+
+                            <div class="col-md-12" style="margin-top:10px;margin-bottom:10px">
+                                <table id="voucherDetailTable" class="display nowrap cell-border table table-bordered table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th data-class="expand" style="width: 20px; background-color: @bgColor ; color: white; padding: 7px; text-align: center;border-right:none "></th>
+                                            <th data-class="expand" style="width: 20px; background-color: @bgColor; color: white; padding: 7px; text-align: center; border-left: none; "></th>
+                                            <th data-hide="" style="width: 300px; background-color: @bgColor; color: white; padding: 7px; text-align: left; ">Detail</th>
+                                            <th style="width: 200px; background-color: @bgColor; color: white; padding: 7px; text-align: left;">Remarks</th>
+                                            <th style="width: 70px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Debit</th>
+                                            <th style="width: 70px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Credit</th>
+                                            <th style="width: 70px; background-color: @bgColor; color: white; padding: 7px; text-align: left; ">Currency</th>
+                                            <th style="width: 110px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Currency Debit</th>
+                                            <th style="width: 110px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Currency Credit</th>
+                                            <th style="width: 110px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Exchange Rate</th>
+                                            <th style="width: 130px; background-color: @bgColor; color: white; padding: 7px; ">Cheque No.</th>
+                                            <th style="width: 180px; background-color: @bgColor; color: white; padding: 7px; text-align: left; ">Tax Name</th>
+                                            <th style="width: 90px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Tax Rate</th>
+                                            <th style="width: 90px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Tax Value</th>
+                                            <th style="width: 100px; background-color: @bgColor; color: white; padding: 7px; text-align: right; ">Net Debit</th>
+                                            <th style="width: 100px; background-color: @bgColor; color: white; padding: 7px;text-align:right ">Net Credit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12" id="" style="margin-top:10px;margin-bottom:10px">
+                        <label class="pull-right">
+                            <span style="font-size: 20px" id="TotalDebitLbl">Total Debit:</span>
+                            <span style="font-size: 20px; margin-left: 8px; color: green;" id="TotalDebit">0.00</span>
+                        </label>
+                    </div>
+                    <div class="col-md-12" id="" style="margin-bottom:10px">
+                        <label class="pull-right">
+                            <span style="font-size: 20px" id="TotalCreditLbl">Total Credit:</span>
+                            <span style="font-size: 20px; margin-left: 8px; color: green;" id="TotalCredit">0.00</span>
+                        </label>
+                    </div>
+
+            </fieldset>
+            <footer>
+                <button type="submit" id="btn_Save" class="btn btn-labeled btn-primary pull-right">
+                    SAVE
+                </button>
+            </footer>
+            @*<footer class="modal-footer" style="margin-top:11px;background-color:#F9F9F9;border-top:1px solid #ddd">
+
+                <button type="submit" id="btn_Save" class="btn btn-primary btnSaveForm pull-right">
+                    SAVE
+                </button>
+
+            </footer>*@
+        }
+    </main>
+</div>
+<script type="text/javascript">
+
+
+      $(document).ready(function () {
+
+            $('#btnCancelDetail').hide();
+            $('#voucherDetailTable').dataTable({
+                "sDom": '<"top">rt<"bottom"lp i><"clear">',
+                "autoWidth": true,
+                "bPaginate": false,
+                "serverSide": false,
+                "bLengthChange": false,
+                "processing": false,
+                "searching": false,
+                "bInfo": false,
+                "ordering": false,
+                "scrollX": true,
+                //"scrollY": 200
+            });
+
+
+
+
+
+
+
+
+            if ($('#IsNeWOrEdit').val() == "Save") {
+
+                $('#Credit').val("");
+                $('#ProjectId').val(null).trigger("change");
+                $('#DetailCode1').val(null).trigger("change.select2");
+                $('#ExchangeRate').val("");
+                $('#CurrencyCredit').val("");
+                $('#CurrencyId').val(null).trigger("change.select2");
+               // ClearLineEntryForm();
+                //
+                //
+                GetVoucherCode();
+                todayDate();
+            }
+            else {
+
+
+                if ($('#CurrencyId').find("option[value='" + $('#HiddenCurrencyId').val() + "']").length) {
+                    $('#CurrencyId').val($('#HiddenCurrencyId').val()).trigger('change.select2');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption = new Option($('#HiddenCurrencyName').val(), $('#HiddenCurrencyId').val(), true, true);
+                    // Append it to the select
+                    $('#CurrencyId').append(newOption).trigger('change.select2');
+                }
+
+                if ($('#ProjectId').find("option[value='" + $('#HiddenProjectId').val() + "']").length) {
+                    $('#ProjectId').val($('#HiddenProjectId').val()).trigger('change.select2');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption = new Option($('#HiddenProjectName').val(), $('#HiddenProjectId').val(), true, true);
+                    // Append it to the select
+                    $('#ProjectId').append(newOption).trigger('change.select2');
+                }
+
+                if ($('#DetailCode1').find("option[value='" + $('#HiddenDetailCode').val() + "']").length) {
+                    $('#DetailCode1').val($('#HiddenDetailCode').val()).trigger('change.select2');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var newOption = new Option($('#HiddenDetailName').val(), $('#HiddenDetailCode').val(), true, true);
+                    // Append it to the select
+                    $('#DetailCode1').append(newOption).trigger('change.select2');
+                }
+
+                getVoucherDetail($('#VoucherNo').text());
+
+
+                //todayDate();
+
+            }
+
+      });
+
+
+          var pageSize1 = 20;
+            var optionListUrl1 = '@Url.Action("GetCurrencyList", "Combolist")';
+
+        $('#CurrencyId1').select2({
+                ajax: {
+                    delay: 150,
+                url: optionListUrl1,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize1,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize1) < data.Total
+                            }
+                        };
+                    }
+                },
+                placeholder: "-- Select Currency--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+
+                  var pageSize2 = 20;
+            var optionListUrl2 = '@Url.Action("GetCurrencyList", "Combolist")';
+
+        $('#CurrencyId').select2({
+                ajax: {
+                    delay: 150,
+                url: optionListUrl2,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize2,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize2) < data.Total
+                            }
+                        };
+                    }
+                },
+                placeholder: "-- Select Currency--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+
+
+                  var pageSize3 = 20;
+                  var optionListUrl3 = '@Url.Action("GetProjectList", "Combolist")';
+          $('#ProjectId').select2({
+                ajax: {
+                    delay: 150,
+                url: optionListUrl3,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize3,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize3) < data.Total
+                            }
+                        };
+                    }
+                },
+                placeholder: "-- Select Project--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+
+
+
+
+
+                          var pageSize5 = 20;
+            var optionListUrl5 = '@Url.Action("GetAccountDetailList", "Combolist")';
+        $('#DetailCode').select2({
+                ajax: {
+                    delay: 150,
+                  url: optionListUrl5,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize5,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize5) < data.Total
+                            }
+                        };
+                    }
+                },
+                placeholder: "-- Select Account--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+                 var pageSize6 = 20;
+            var optionListUrl6 = '@Url.Action("GetTaxDetailList", "Combolist")';
+        $('#TaxId').select2({
+                ajax: {
+                    delay: 150,
+                url: optionListUrl6,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize6,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize6) < data.Total
+                            }
+                        };
+                    }
+            },
+            placeholder: "-- Select Tax--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+
+
+                          var pageSize7 = 20;
+            var optionListUrl7 = '@Url.Action("GetDetailCodeCash", "Combolist")';
+        $('#DetailCode1').select2({
+                ajax: {
+                    delay: 150,
+                url: optionListUrl7,
+                    dataType: 'json',
+
+                    data: function (params) {
+                        params.page = params.page || 1;
+                        return {
+                            searchTerm: params.term,
+                            pageSize: pageSize7,
+                            pageNumber: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize7) < data.Total
+                            }
+                        };
+                    }
+                },
+                placeholder: "-- Select Account--",
+                minimumInputLength: 0,
+                allowClear: true,
+                dropdownParent: $(".mySelect")
+        });
+
+
+
+    var $checkoutForm = $('#popupForm').validate({
+
+        rules: {
+
+            Credit: {
+                required: true
+            },
+
+            DetailCode: {
+                required: true
+            },
+            DetailCode1: {
+                required: true
+            },
+            CurrencyId: {
+                required: true
+            },
+
+            ProjectId: {
+                required: true
+            },
+
+
+
+        },
+        messages: {
+
+            Credit: {
+                required: 'Credit is required.'
+            },
+
+
+            DetailCode: {
+                required: 'Account selection is required.'
+            },
+
+            ProjectId: {
+                required: 'Project  selection  is required.'
+            },
+
+            DetailCode1: {
+                required: 'Account selection is required.'
+            },
+            CurrencyId: {
+                required: 'Currency selection  is required.'
+            },
+
+
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+            if (element.val() == '' || element.val() == null) {
+                element.parents('td').siblings('td').find('.btn').css("margin-top", "-24px");
+                element.parents('td').siblings('td').find('.btnP').css("margin-top", "-5px");
+            }
+        }
+    });
+        function ClearLineEntryForm() {
+            $('#DetailCode').val(null).trigger("change.select2");
+                $('#PreviousBalance').html("0.00");
+                $('#LineDebit').val('');
+                $('#LineCredit').val('');
+                $('#LineRemarks').val('');
+                $('#LineChequeNo').val('');
+                $('#TaxCheckbox').prop("checked", false);
+                $('#taxRow').attr("hidden", "hidden");
+                $('#CurrencyId1').val(null).trigger("change.select2");
+                $('#LineCurrencyDebit').val('');
+            $('#LineCurrencyCredit').val('');
+             $('#LineExchangeRate').val('');
+            //
+                $('#TaxId').val(null).trigger("change.select2");
+                $('#TaxRate').val('');
+                $('#TaxValue').html("0.00");
+                $('#NetLbl').html("Net Debit");
+            $('#Net').html("0.00");
+            $('#btnCancelDetail').hide();
+            $('#IsEdit').val(0);
+                $('#HiddenLineDebit').val('');
+                $('#HiddenLineCredit').val('');
+                $('#HiddenLineCurrencyDebit').val('');
+                $('#HiddenLineCurrencyCredit').val('');
+                $('#HiddenLineExchangeRate').val('');
+            $('#btnAddVoucherDetail').find('.btnLineSpan').html('Add');
+        }
+        function getVoucherDetail(voucherNo) {
+                $.ajax({
+                    type: "POST",
+                    url: "/cashpayment/GetCashPaymentDetailById/" + voucherNo,
+                    dataType: 'json',
+                    success: function (response) {
+                        var vtable = $('#voucherDetailTable').DataTable();
+                        vtable.clear().draw();
+                        for (var key in response.data) {
+                            vtable.row.add([
+                                "<a href='javascript:void(0);' class='btn btn-success editRowBtn' title='Edit' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-edit'></i></a>",
+                                "<a href='javascript:void(0);' class='btn btn-danger deleteRowBtn' title='Delete' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-times-circle'></i></a>",
+                                "<span><input type='hidden' class='LineDetailCode01' value=" + response.data[key].LineDetailCode + " />" + response.data[key].DetailName + "</span>",
+                                "<span><input type='hidden' class='LineRemarks01' value=" + response.data[key].LineRemarks + " />" + response.data[key].LineRemarks + "</span>",
+                                "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDebit01' value=" + response.data[key].LineDebit + " />" + response.data[key].LineDebit + "</span>",
+                                "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineCredit01' value=" + response.data[key].LineCredit + " />" + response.data[key].LineCredit + "</span>",
+                                "<span><input type='hidden' class='LineDetailCode01' value=" + response.data[key].LineCurrencyId + " />" + response.data[key].CurrencyName + "</span>",
+                                "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + response.data[key].LineCurrencyDebit + " />" + response.data[key].LineCurrencyDebit + "</span>",
+                                "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + response.data[key].LineCurrencyCredit + " />" + response.data[key].LineCurrencyCredit + "</span>",
+                                "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + response.data[key].LineExchangeRate + " />" + response.data[key].LineExchangeRate + "</span>",
+                                "<span><input type='hidden' class='LineCheque01' value=" + response.data[key].LineChequeNo + " />" + response.data[key].LineChequeNo + "</span>",
+                                "<span><input type='hidden' class='TaxId01' value=" + response.data[key].TaxId + " />" + response.data[key].TaxName + "</span>",
+                                "<span class='pull-right'><input type='hidden' class='TaxRate01' value=" + response.data[key].TaxRate + " />" + response.data[key].TaxRate + "</span>",
+                                "<span class='pull-right'><input type='hidden' class='TaxValue01' value=" + response.data[key].TaxValue + " />" + response.data[key].TaxValue + "</span>",
+                                "<span class='pull-right'><input type='hidden' class='NetDebit01' value=" + response.data[key].NetDebit + " />" + response.data[key].NetDebit + "</span>",
+                                "<span class='pull-right'><input type='hidden' class='NetCredit01' value=" + response.data[key].NetCredit + " />" + response.data[key].NetCredit + "</span>",
+                            ]).draw(false);
+                        }
+                        getGrandTotal();
+                    }
+                })
+            }
+
+            $('#TaxCheckbox').change(function () {
+                var check = $(this).is(':checked');
+                if (check == true) {
+                    $('#taxRow').removeAttr("hidden");
+                }
+                else {
+                    $('#taxRow').attr("hidden", "hidden");
+                    $('#TaxID').val(null).trigger('change');
+                    $('#TaxRate').val('');
+                    $('#TaxValue').html(0.00);
+
+                    var debit = $('#LineDebit').val();
+                    var credit = $('#LineCredit').val();
+                    var taxRate = $('#TaxRate').val();
+                    if (debit == '' || debit == null || isNaN(debit)) {
+                        debit = 0;
+                    }
+                    if (credit == '' || credit == null || isNaN(credit)) {
+                        credit = 0;
+                    }
+
+                    if (debit == 0 && credit == 0) {
+                        $('#NetLbl').html('Net Debit:');
+                        $('#Net').html('0.00');
+                    }
+                    else if (debit != 0 && credit == 0) {
+                        $('#NetLbl').html('Net Debit:');
+                        $('#Net').html(ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)));
+                    }
+                    else if (debit == 0 && credit != 0) {
+                        $('#NetLbl').html('Net Credit:');
+                        $('#Net').html(ReplaceNumberWithCommas(parseFloat(credit).toFixed(2)));
+                    }
+                    else if (debit != 0 && credit != 0) {
+                        $('#NetLbl').html('Net Debit:');
+                        $('#Net').html(ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)));
+                    }
+                }
+            })
+
+            $('#DefaultVoucher').change(function () {
+                var check = $(this).is(':checked');
+                if (check == true) {
+                  //  $('#LineCredit').val('');
+                    $('#LineCreditTd').attr("hidden", "hidden");
+                    $('#CurrencyCreditSection').attr("hidden", "hidden");
+                }
+                else {
+
+                    $('#LineCreditTd').removeAttr("hidden");
+                    $('#CurrencyCreditSection').removeAttr("hidden");
+                }
+                //getTaxValue();
+            })
+
+
+            $('#CurrencyCredit').keyup(function () {
+                upperCredit();
+            })
+
+
+
+            $('#ExchangeRate').keyup(function () {
+                upperCredit();
+            })
+
+            $('#CurrencyDebitSection').keyup(function () {
+                lowerDebitCredit();
+            })
+
+
+            $('#CurrencyCreditSection').keyup(function () {
+                lowerDebitCredit();
+            })
+
+            $('#LineExchangeRate').keyup(function () {
+                lowerDebitCredit();
+            })
+
+            $('#Credit').keyup(function () {
+                getGrandTotal();
+            })
+
+
+            $('#TaxId').change(function () {     // change event of tax
+                var taxId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/cashpayment/getTaxRate/" + taxId,
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#TaxRate').val(response);
+                        getTaxValue();
+                    }
+                })
+            })
+
+            $('#LineDebit').keyup(function () {
+
+                getTaxValue();
+            })
+
+            //$('#LineCurrencyCredit').keyup(function () {
+
+            //    getTaxValue();
+            //})
+
+            //$('#LineCurrencyDebit').keyup(function () {
+
+            //    getTaxValue();
+            //})
+
+            $('#LineCredit').keyup(function () {
+                getTaxValue();
+            })
+            $('#TaxRate').keyup(function () {
+
+                getTaxValue();
+            })
+
+
+        $('#DetailCode').change(function () {
+            $('#LineDetailDiv').closest('#LineDetailDiv').find('.select2-selection').css('border-color', '#ddd');
+            $('#LineDetailDiv').closest('#LineDetailDiv').find('.select2-selection').css('background-color', '#fff');
+        })
+
+
+            $('#btnAddVoucherDetail').click(function () {
+
+                    var lineDetail = $('#DetailCode option:selected').val();
+                    var check = 0;
+                    if (lineDetail == '' || lineDetail == null || lineDetail == 0) {
+                        $('#LineDetailDiv').closest('#LineDetailDiv').find('.select2-selection').css('border-color', '#A90329');
+                        $('#LineDetailDiv').closest('#LineDetailDiv').find('.select2-selection').css('background-color', '#FFF0F0');
+                        check = 1;
+                    }
+                    var debit = $('#LineDebit').val();
+                    var credit = $('#LineCredit').val();
+                    var currencyCredit = $('#LineCurrencyCredit').val();
+                    var currencyValue = $('#LineCurrencyDebit').val();
+                    var exchangeRate = $('#LineExchangeRate').val();
+                 var currencyId = $('#CurrencyId1').val();
+
+                var currencyName = $('#CurrencyId1 option:selected').text();
+
+                    if ((debit == '' || debit == null || debit == 0) && $('#LineCreditTd').is(":hidden")) {
+                        $('#LineDebit').css('border-color', '#A90329');
+                        $('#LineDebit').css('background-color', '#FFF0F0');
+                        check = 1;
+                    }
+                    if ($('#LineCreditTd').is(":visible") && (debit == '' || debit == null || debit == 0) && (credit == '' || credit == null || credit == 0)) {
+                        $('#LineDebit').css('border-color', '#A90329');
+                        $('#LineDebit').css('background-color', '#FFF0F0');
+                        check = 1;
+                    }
+                    if (debit == null || debit == '' || debit == 0) {
+                        debit = 0;
+                    }
+                    if (credit == null || credit == '' || credit == 0) {
+                        credit = 0;
+                    }
+                    if (currencyValue == '' || currencyValue == null) {
+                        currencyValue = 0;
+                    }
+                    if (exchangeRate == '' || exchangeRate == null) {
+                        exchangeRate = 0;
+                    }
+
+                    if (check == 1) {
+                        return false;
+                    }
+                    if (debit == 0) {
+                        currencyValue = 0;
+                    }
+                    else {
+                        currencyCredit = 0;
+                    }
+                    if (debit != null && debit != '' && debit != 0 && credit != null && credit != '' && credit != 0) {
+                        alert("Please give only debit or credit value.");
+                        return false;
+                    }
+                    var remarks = $('#LineRemarks').val();
+                    var vtable = $('#voucherDetailTable').DataTable();
+                    var lineDetailCode = $('#DetailCode option:selected').text();
+
+                var chequeNo = $('#LineChequeNo').val();
+                    var taxId = $('#TaxId').val();
+                    var taxName = $('#TaxId option:selected').text();
+                    var taxRate = $('#TaxRate').val();
+                    if (taxRate == '' || taxRate == null || isNaN(taxRate)) {
+                        taxRate = 0;
+                    }
+                var taxValue = $('#TaxValue').html();
+                var net = ReplaceCommas($('#Net').html());
+                    var netDebit = '';
+                    var netCredit = '';
+                    if (net == 0) {
+                        if (debit != null && debit != '') {
+                            $('#NetLbl').html('Net Debit:');
+                            net = debit;
+                        }
+                        else if (credit != null && credit != '') {
+                            $('#NetLbl').html('Net Credit:');
+                            net = credit;
+                        }
+                    }
+                    else {
+                        net = ReplaceCommas($('#Net').html());
+                    }
+                    if ($('#NetLbl').html().trim() == 'Net Debit:') {
+                        netDebit = net;
+                        netCredit = 0;
+                    }
+                    else {
+                        netCredit = net;
+                        netDebit = 0;
+                    }
+                    if (parseFloat(taxValue) == 0 && parseFloat(debit) != parseFloat(netDebit) && parseFloat(credit) != parseFloat(netCredit)) {
+                        alert("Error! Please try again.");
+                        return false;
+                }
+                if ($('#btnAddVoucherDetail').find('.btnLineSpan').html().trim() == 'Add') {
+                        vtable.row.add([
+                            "<a href='javascript:void(0);' class='btn btn-success editRowBtn' title='Edit' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-edit'></i></a>",
+                            "<a href='javascript:void(0);' class='btn btn-danger deleteRowBtn' title='Delete' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-times-circle'></i></a>",
+                            "<span><input type='hidden' class='LineDetailCode01' value=" + lineDetail + " />" + lineDetailCode + "</span>",
+                            "<span><input type='hidden' class='LineRemarks01' value=" + remarks + " />" + remarks + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDebit01' value=" + debit + " />" + ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)) + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineCredit01' value=" + credit + " />" + ReplaceNumberWithCommas(parseFloat(credit).toFixed(2)) + "</span>",
+                            "<span><input type='hidden' class='LineDetailCode01' value=" + currencyId + " />" + currencyName + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + currencyValue + " />" + currencyValue + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + currencyCredit + " />" + currencyCredit + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + exchangeRate + " />" + exchangeRate + "</span>",
+                            "<span><input type='hidden' class='LineCheque01' value=" + chequeNo + " />" + chequeNo + "</span>",
+                            "<span><input type='hidden' class='TaxId01' value=" + taxId + " />" + taxName + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='TaxRate01' value=" + taxRate + " />" + taxRate + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='TaxValue01' value=" + taxValue + " />" + taxValue + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='NetDebit01' value=" + netDebit + " />" + ReplaceNumberWithCommas(parseFloat(netDebit).toFixed(2)) + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='NetCredit01' value=" + netCredit + " />" + ReplaceNumberWithCommas(parseFloat(netCredit).toFixed(2)) + "</span>",
+                        ]).draw(false);
+                    }
+                else {
+                    $('#btnAddVoucherDetail').find('.btnLineSpan').html('Add');
+                        $('#btnCancelDetail').hide();
+                        var tr = $('#HiddenTr').val();
+                        vtable.row(tr).data([
+                            "<a href='javascript:void(0);' class='btn btn-success editRowBtn' title='Edit' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-edit'></i></a>",
+                            "<a href='javascript:void(0);' class='btn btn-danger deleteRowBtn' title='Delete' style='height: 34px;font-size: 14.5px;font-size: 13.5px;idth:25px;line-height: 20px;'><i class='fal fa-times-circle'></i></a>",
+                            "<span><input type='hidden' class='LineDetailCode01' value=" + lineDetail + " />" + lineDetailCode + "</span>",
+                            "<span><input type='hidden' class='LineRemarks01' value=" + remarks + " />" + remarks + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDebit01' value=" + debit + " />" + ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)) + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineCredit01' value=" + credit + " />" + ReplaceNumberWithCommas(parseFloat(credit).toFixed(2)) + "</span>",
+                            "<span><input type='hidden' class='LineDetailCode01' value=" + currencyId + " />" + currencyName + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + currencyValue + " />" + currencyValue + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + currencyCredit + " />" + currencyCredit + "</span>",
+                            "<span style='text-align:right' class='pull-right'><input type='hidden' class='LineDetailCode01' value=" + exchangeRate + " />" + exchangeRate + "</span>",
+                            "<span><input type='hidden' class='LineCheque01' value=" + chequeNo + " />" + chequeNo + "</span>",
+                            "<span><input type='hidden' class='TaxId01' value=" + taxId + " />" + taxName + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='TaxRate01' value=" + taxRate + " />" + taxRate + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='TaxValue01' value=" + taxValue + " />" + taxValue + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='NetDebit01' value=" + netDebit + " />" + ReplaceNumberWithCommas(parseFloat(netDebit).toFixed(2)) + "</span>",
+                            "<span class='pull-right'><input type='hidden' class='NetCredit01' value=" + netCredit + " />" + ReplaceNumberWithCommas(parseFloat(netCredit).toFixed(2)) + "</span>",
+                        ]).draw(false);
+                    }
+                    getGrandTotal();
+                    ClearLineEntryForm();
+                    $('#HiddenLineDebit').val('');
+                    $('#HiddenLineCredit').val('');
+                    $('#HiddenLineCurrencyDebit').val('');
+                    $('#HiddenLineCurrencyCredit').val('');
+                    $('#HiddenLineExchangeRate').val('');
+
+
+            })
+            $('#MainDetailCode').on('select2:select', function (e) {
+                $('#Date').focus();
+            });
+            $('#DefaultVoucher').on('focusout', function () {
+                $('#LineDetailCode').select2('open');
+            });
+            $('#LineDetailCode').on('select2:select', function (e) {
+                $('#LineDebit').focus();
+            });
+        $('#btnCancelDetail').click(function () {
+            ClearLineEntryForm();
+            })
+            $(document).on('click', '.editRowBtn', function () {
+                $('#LineCurrencyDebit').val("");
+                var vtable = $('#voucherDetailTable').DataTable();
+                var tr = vtable.row($(this).parents('tr')).index();
+                $('#HiddenTr').val(tr);
+                var data = vtable.row($(this).parents('tr')).data();
+                var detailCode = data[2].split('value=')[1].split('/>')[0].trim();
+                var remarks = data[3].split('value=')[1].split('/>')[0].trim();
+                var debit = data[4].split('value=')[1].split('/>')[0].trim();
+                var credit = data[5].split('value=')[1].split('/>')[0].trim();
+                var currencyId = data[5].split('value=')[1].split('/>')[0].trim();
+                var currencyDebit = data[7].split('value=')[1].split('/>')[0].trim();
+                var currencyCredit = data[8].split('value=')[1].split('/>')[0].trim();
+                var exchangeRate = data[9].split('value=')[1].split('/>')[0].trim();
+                var cheque = data[10].split('value=')[1].split('/>')[0].trim();
+                var taxId = data[11].split('value=')[1].split('/>')[0].trim();
+                var taxRate = data[12].split('value=')[1].split('/>')[0].trim();
+                var taxValue = data[13].split('value=')[1].split('/>')[0].trim();
+                var netDebit = data[14].split('value=')[1].split('/>')[0].trim();
+                var netCredit = data[15].split('value=')[1].split('/>')[0].trim();
+
+                if (taxId == 'null' || taxId == 0) {
+                    $('#TaxCheckbox').prop("checked", false);
+                    $('#taxRow').attr("hidden", "hidden");
+                    $('#TaxId').val(null).trigger('change.select2');
+                    $('#TaxRate').val('');
+                    $('#TaxValue').html(0.00);
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html(0.00);
+                }
+                else {
+                    $('#TaxCheckbox').prop("checked", true);
+                    $('#taxRow').removeAttr("hidden");
+                    $('#TaxId').val(taxId).trigger('change.select2');
+                    $('#TaxRate').val(taxRate);
+                    $('#TaxValue').html(taxValue);
+                    if (netCredit == 0) {
+                        $('#NetLbl').html('Net Debit:');
+                        $('#Net').html(netDebit);
+                    }
+                    else {
+                        $('#NetLbl').html('Net Credit:');
+                        $('#Net').html(netCredit);
+                    }
+                }
+
+                $('#DefaultVoucher').prop("checked", false);
+                $('#LineCreditTd').removeAttr("hidden");
+
+
+                $('#LineCurrencyCredit').val(currencyCredit);
+                $('#LineCurrencyDebit').val(currencyDebit);
+                $('#LineExchangeRate').val(exchangeRate);
+                $('#LineDebit').val(debit);
+                $('#Net').html(netDebit);
+
+
+                if ($('#DetailCode').find("option[value='" + detailCode + "']").length) {
+                    $('#DetailCode').val(detailCode).trigger('change');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var itemName = data[2].split('/>')[1].split('</span>')[0].trim();
+                    var newOption = new Option(itemName, detailCode, true, true);
+                    // Append it to the select
+                    $('#DetailCode').append(newOption).trigger('change');
+                }
+
+
+                if ($('#CurrencyId1').find("option[value='" + currencyId + "']").length) {
+                    $('#CurrencyId1').val(currencyId).trigger('change.select2');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var itemName = data[6].split('/>')[1].split('</span>')[0].trim();
+                    var newOption = new Option(itemName, currencyId, true, true);
+                    // Append it to the select
+                    $('#CurrencyId1').append(newOption).trigger('change.select2');
+                }
+
+
+
+
+                if ($('#TaxId').find("option[value='" + taxId + "']").length) {
+                    $('#TaxId').val(taxId).trigger('change.select2');
+                } else {
+                    // Create a DOM Option and pre-select by default
+                    var itemName = data[11].split('/>')[1].split('</span>')[0].trim();
+                    var newOption = new Option(itemName, taxId, true, true);
+                    // Append it to the select
+                    $('#TaxId').append(newOption).trigger('change.select2');
+                }
+
+
+
+
+
+
+
+
+
+
+
+                //$('#LineDetailCode').val(detailCode).trigger('change');
+                //$('#LineDetailCode').select2('val', detailCode);
+                $('#LineRemarks').val(remarks);
+
+                $('#LineCredit').val(credit);
+                $('#LineChequeNo').val(cheque);
+
+                //getPreviousBalance(detailCode);
+                $('#btnAddVoucherDetail').find('.btnLineSpan').html('Change');
+                $('#btnCancelDetail').removeAttr("hidden");
+                $('#btnCancelDetail').show();
+            })
+            $(document).on('click', '.deleteRowBtn', function () {
+                var vtable = $('#voucherDetailTable').DataTable();
+                var tr = vtable.row($(this).parents('tr')).index();
+                vtable.row(tr).remove().draw(false);
+                ClearLineEntryForm();
+                getGrandTotal();
+            })
+            $('#LineDebit').keydown(function () {
+                $('#LineDebit').css('border-color', '#bdbdbd');
+                $('#LineDebit').css('background-color', '#fff');
+
+                $('#LineCredit').css('border-color', '#bdbdbd');
+                $('#LineCredit').css('background-color', '#fff');
+            }).mousedown(function () {
+                $('#LineDebit').css('border-color', '#bdbdbd');
+                $('#LineDebit').css('background-color', '#fff');
+
+                $('#LineCredit').css('border-color', '#bdbdbd');
+                $('#LineCredit').css('background-color', '#fff');
+            })
+            $('#LineCredit').keydown(function () {
+                $('#LineDebit').css('border-color', '#bdbdbd');
+                $('#LineDebit').css('background-color', '#fff');
+
+                $('#LineCredit').css('border-color', '#bdbdbd');
+                $('#LineCredit').css('background-color', '#fff');
+            }).mousedown(function () {
+                $('#LineDebit').css('border-color', '#bdbdbd');
+                $('#LineDebit').css('background-color', '#fff');
+
+                $('#LineCredit').css('border-color', '#bdbdbd');
+                $('#LineCredit').css('background-color', '#fff');
+            })
+
+        function GetVoucherCode() {
+            $.ajax({
+                type: "POST",
+                url: "/CashPayment/getMaxCodeForCashPayment/",
+                dataType: 'json',
+                success: function (response) {
+                    $('#VoucherNo').val(response);
+                    $('#VoucherNo').text(response);
+                }
+            })
+        }
+
+
+        function getAllData() {
+            var arrayData = [];
+
+            var countBranch = 0;
+            $('#voucherDetailTable tr[role="row"]').each(function () {
+                countBranch++;
+            });
+            var rowsCountBranch = countBranch - 1;
+            var vtableBranch = $('#voucherDetailTable').DataTable();
+            for (rowBranch = 0; rowBranch < rowsCountBranch; rowBranch++) {
+                var data = vtableBranch.row(rowBranch).data();
+                var detailCodeLine = data[2].split('value=')[1].split('/>')[0].trim();
+                var lineCurrencyId = data[6].split('value=')[1].split('/>')[0].trim();
+                var lineCurrencyDebit = data[7].split('value=')[1].split('/>')[0].trim();
+                var lineCurrencyCredit = data[8].split('value=')[1].split('/>')[0].trim();
+                var lineExchangeRate = data[9].split('value=')[1].split('/>')[0].trim();
+                var debit = data[4].split('value=')[1].split('/>')[0].trim();
+                var credit = data[5].split('value=')[1].split('/>')[0].trim();
+                var remarks = data[3].split('value=')[1].split('/>')[0].trim();
+                var cheque = data[10].split('value=')[1].split('/>')[0].trim();
+                var ProjectId = $('#ProjectId').val();
+                var Tax = $('#Tax').is(":checked");
+                var taxId = data[11].split('value=')[1].split('/>')[0].trim();
+                var TaxType = data[11].split('/>')[1].split('</span>')[0].trim();
+                var taxRate = data[12].split('value=')[1].split('/>')[0].trim();
+                var taxValue = data[13].split('value=')[1].split('/>')[0].trim();
+                var netDebit = data[14].split('value=')[1].split('/>')[0].trim();
+                var netCredit = data[15].split('value=')[1].split('/>')[0].trim();
+
+
+
+                if (taxId == "null") {
+                    taxId = 0;
+                }
+
+                else {
+                    taxId = parseInt(taxId);
+                }
+                if (lineCurrencyDebit == '' || lineCurrencyDebit == null) {
+                    lineCurrencyDebit = 0;
+                }
+                if (lineCurrencyCredit == '' || lineCurrencyCredit == null) {
+                    lineCurrencyCredit = 0;
+                }
+                if (lineExchangeRate == '' || lineExchangeRate == null) {
+                    lineExchangeRate = 0;
+                }
+
+
+                var alldata = {
+                    'LineDetailCode': detailCodeLine,
+                    'LineCurrencyId': lineCurrencyId,
+                    'LineCurrencyDebit': lineCurrencyDebit,
+                    'LineCurrencyCredit': lineCurrencyCredit,
+                    'LineExchangeRate': lineExchangeRate,
+                    'LineDebit': debit,
+                    'LineCredit': credit,
+                    'LineRemarks': remarks,
+                    'LineChequeNo': cheque,
+                    'ProjectId': ProjectId,
+                    'Tax': Tax,
+                    'TaxId': taxId,
+                    'TaxType': TaxType,
+                    'TaxRate': taxRate,
+                    'TaxValue': taxValue,
+                    'NetDebit': netDebit,
+                    'NetCredit': netCredit,
+
+
+
+                }
+                arrayData.push(alldata);
+            }
+            return arrayData;
+        }
+    $('#popupForm').on('submit', function (e) {
+        e.preventDefault();
+        if (!$("#popupForm").valid()) {
+
+
+            return false;
+
+        }
+
+        var totalDebit = ReplaceCommas($('#TotalDebit').html());
+        var totalCredit = ReplaceCommas($('#TotalCredit').html());
+
+        if (parseFloat(totalDebit) != parseFloat(totalCredit)) {
+            alert("Error! Total debit and total credit should be equal.");
+
+
+            return false;
+        }
+
+        $('#btn_Save').attr('disabled', 'disabled');
+        $('#btn_Save').html("<i class='fa fa-refresh fa-spin'></i> &nbsp; Processing...");
+
+        var VoucherNo = $('#VoucherNo').text();
+        var VoucherDate = $('#VoucherDate').val();
+        var DetailCode = $('#DetailCode1').val();
+        var CurrencyId = $('#CurrencyId').val();
+        var CurrencyDebit = $('#CurrencyDebit').val();
+        var CurrencyCredit = $('#CurrencyCredit').val();
+        var ExchangeRate = $('#ExchangeRate').val();
+        var Debit = $('#Debit').val();
+        var Credit = $('#Credit').val();
+        var Remarks = $('#Remarks').val();
+        var PaidBy = $('#PaidBy').val();
+        var RecievedBy = $('#RecievedBy').val();
+        var ProjectId = $('#ProjectId').val();
+        var DefaultVoucher = $('#DefaultVoucher').is(":checked");
+        var Tax = $('#Tax').val();
+        var TaxId = $('#TaxId').val();
+        var TaxType = $('#TaxType').val();
+        var TaxRate = $('#TaxRate').val();
+        var TaxValue = $('#TaxValue').val();
+        var NetDebit = $('#NetDebit').val();
+        var NetCredit = $('#NetCredit').val();
+        var TotalCredit = $('#TotalCredit').val();
+        var ReferenceNo = $('#ReferenceNo').val();
+        var ChequeNo = $('#ChequeNo').val();
+        var FinancialYearId = $('#FinancialYearId').val();
+        var BranchId = $('#BranchId').val();
+        var IsNeWOrEdit = $('#IsNeWOrEdit').val();
+
+        var st =
+        {
+            VoucherNo: VoucherNo,
+            VoucherDate: VoucherDate,
+            DetailCode: DetailCode,
+            CurrencyId: CurrencyId,
+            CurrencyDebit: CurrencyDebit,
+            CurrencyCredit: CurrencyCredit,
+            ExchangeRate: ExchangeRate,
+            Debit: Debit,
+            Credit: Credit,
+            Remarks: Remarks,
+            CurrencyId: CurrencyId,
+            CurrencyId: CurrencyId,
+            BranchId: BranchId,
+            PaidBy: PaidBy,
+            RecievedBy: RecievedBy,
+            ProjectId: ProjectId,
+            Tax: Tax,
+            TaxId: TaxId,
+            TaxType: TaxType,
+            TaxRate: TaxRate,
+            TaxValue: TaxValue,
+            NetDebit: NetDebit,
+            NetCredit: NetCredit,
+            TotalCredit: TotalCredit,
+            ChequeNo: ChequeNo,
+            BranchId: BranchId,
+            IsNeWOrEdit: IsNeWOrEdit,
+            FinancialYearId: FinancialYearId,
+            DefaultVoucher: DefaultVoucher,
+            ReferenceNo: ReferenceNo,
+        }
+
+        var allData = JSON.stringify(getAllData());
+
+            $.ajax({
+
+            type: "POST",
+            url: "/CashPayment/InsertUpdateCashPayment/",
+            data: { 'user': st, 'allData': allData},
+            dataType: 'json',
+            success: function (data) {
+                $('#btn_Save').html("Save");
+                if (data.status) {
+
+                    //$('#MyModal').animate({ scrollTop: 0 }, 'fast');
+                    alert('Cash Payment Saved Successfully');
+                    $('.alertDiv').html('<div class="alert alert-success" id="success-alert" style="">' +
+                        '<button type="button" class="close" data-dismiss="alert">x</button>' +
+                        '<strong>Success! </strong>' +
+                        'Cash Payment  Saved Succesfully.' +
+                        '</div>');
+                    $('#Credit').val("");
+                    $('#ExchangeRate').val("");
+                    $('#CurrencyCredit').val("");
+                    $('#ProjectId').val(null).trigger("change");
+                    $('#DetailCode1').val(null).trigger("change");
+                    $('#CurrencyId').val(null).trigger("change");
+
+                    $('#ExchangeRate').val("");
+                    $('#ReferenceNo').val("");
+                    $('#ChequeNo').val("");
+                    $('#VoucherDate').val("");
+                    $('#PaidBy').val("");
+                    $('#RecievedBy').val("");
+                    $('#Remarks').val("");
+
+                    $('#CurrencyCredit').val("");
+                    $('#CurrencyId').val(null).trigger("change.select2");
+
+                    $("#success-alert").fadeTo(1000, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                        $('.alertDiv').html('');
+                        $('.close').click();
+                        //oTable.ajax.reload(null, false);
+                    });
+
+
+                    window.location.href = '/admin/cashpayment/cashpaymentindex';
+
+
+
+
+                }
+                else {
+
+
+                    $('#btn_Save').prop('disabled', false);
+                    alert(data.message);
+                }
+            }
+        })
+
+    })
+
+    $(document).on("click", '.select2-selection__clear', function () {
+        $(this).parents("label").find('select').val(null).trigger("change");
+         })
+
+        $("#Credit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#LineDebit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#LineCredit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#TaxRate").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#CurrencyCredit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#ExchangeRate").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });//
+        $("#LineCurrencyDebit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#LineCurrencyCredit").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+        $("#LineExchangeRate").on('keypress', function (event) {
+            NumberPostiveNegativeWithDecimal(event, this);
+        });
+
+
+
+        function NumberPostiveNegativeWithDecimal(evt, element) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (
+                (charCode != 127) &&
+                (charCode != 8) &&
+                (charCode != 45 || $(element).val().indexOf('-') != -1) &&
+                (charCode != 46 || $(element).val().indexOf('.') != -1) &&
+                (charCode < 48 || charCode > 57))
+                evt.preventDefault();
+            return true;
+        }
+
+
+
+
+
+
+        function ReplaceNumberWithCommas(yourNumber) {
+            if (yourNumber != "0") {
+                //Seperates the components of the number
+                var n = yourNumber.toString().split(".");
+                //Comma-fies the first part
+                if (n[0].length != 1 && n[0].length != 2 && n[0].length != 3) {
+                    var lastThreeDigits = n[0].toString().substr(n[0].toString().length - 3);
+                    var remainingNum = n[0].toString().substr(0, n[0].toString().length - 3);
+                    n[0] = remainingNum;
+                    n[0] = n[0].replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+                    n[0] = n[0] + ',' + lastThreeDigits;
+                }
+
+                if (n.length == 1) {
+                    n[0] = n[0] + ".00";
+                }
+                else {
+                    if (n[1].toString().length == 1) {
+
+                        n[1] = n[1] + "0";
+                    }
+                }
+
+                //Combines the two sections
+                n = n.join(".");
+            }
+            else {
+                n = yourNumber;
+            }
+            return n;
+        }
+
+
+
+
+
+
+        function getTaxValue() {
+            var debit = $('#LineDebit').val();
+            var credit = $('#LineCredit').val();
+            var taxRate = $('#TaxRate').val();
+            var currencyDebit = $('#LineCurrencyDebit').val();
+            var currencyCredit = $('#LineCurrencyCredit').val();
+            var exchangeRate = $('#LineExchangeRate').val();
+            if (currencyDebit == '' || currencyDebit == null) {
+                currencyDebit = 0;
+            }
+            if (currencyCredit == '' || currencyCredit == null) {
+                currencyCredit = 0;
+            }
+            if (exchangeRate == '' || exchangeRate == null) {
+                exchangeRate = 0;
+            }
+            if (debit == '' || debit == null || isNaN(debit)) {
+                debit = 0;
+            }
+            if (credit == '' || credit == null || isNaN(credit)) {
+                credit = 0;
+            }
+            if (taxRate == '' || taxRate == null || isNaN(taxRate)) {
+                taxRate = 0;
+            }
+
+
+            if ($('#TaxId').val() != '' && $('#TaxId').val() != null && $('#TaxId').val() != 0) {
+                if (debit == 0 && credit == 0) {
+                    $('#TaxValue').html('0.00');
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html('0.00');
+                }
+                else if (debit != 0 && credit == 0) {
+
+                    var taxAmount = parseFloat(debit) * parseFloat(taxRate);
+                    taxAmount = (parseFloat(taxAmount) / 100);
+                    var net = parseFloat(debit) + taxAmount;
+                    $('#TaxValue').html(ReplaceNumberWithCommas(taxAmount.toFixed(2)));
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html(ReplaceNumberWithCommas(net.toFixed(2)));
+                }
+                else if (debit == 0 && credit != 0) {
+                    var taxAmount = parseFloat(credit) * parseFloat(taxRate);
+                    taxAmount = (parseFloat(taxAmount) / 100);
+                    var net = parseFloat(credit) + taxAmount;
+                    $('#TaxValue').html(ReplaceNumberWithCommas(taxAmount.toFixed(2)));
+                    $('#NetLbl').html('Net Credit:');
+                    $('#Net').html(ReplaceNumberWithCommas(net.toFixed(2)));
+                }
+                else if (debit != 0 && credit != 0) {
+                    var taxAmount = parseFloat(debit) * parseFloat(taxRate);
+                    taxAmount = (parseFloat(taxAmount) / 100);
+                    var net = parseFloat(debit) + taxAmount;
+                    $('#TaxValue').html(ReplaceNumberWithCommas(taxAmount.toFixed(2)));
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html(ReplaceNumberWithCommas(net.toFixed(2)));
+                }
+            }
+            else {
+
+
+                //console.log(debit);
+                //    console.log(credit);
+                //    console.log(parseFloat(debit));
+                //    console.log(parseFloat(credit));
+                //     console.log(parseFloat(debit).toFixed(2));
+                //    console.log(parseFloat(credit).toFixed(2));
+                //     console.log(ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)));
+                //    console.log(ReplaceNumberWithCommas(parseFloat(credit).toFixed(2)));
+                if (debit == 0 && credit == 0) {
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html('0.00');
+                }
+                else if (debit != 0 && credit == 0) {
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html(ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)));
+                }
+                else if (debit == 0 && credit != 0) {
+                    $('#NetLbl').html('Net Credit:');
+                    $('#Net').html(ReplaceNumberWithCommas(parseFloat(credit).toFixed(2)));
+                }
+                else if (debit != 0 && credit != 0) {
+                    $('#NetLbl').html('Net Debit:');
+                    $('#Net').html(ReplaceNumberWithCommas(parseFloat(debit).toFixed(2)));
+                }
+            }
+        }
+
+        function ReplaceCommas(yourNumber) {
+            var noCommas = yourNumber.replace(/,/g, ''),
+                asANumber = +noCommas;
+            return noCommas;
+        }
+
+
+
+        function getGrandTotal() {
+
+            var count = 0;
+            $('#voucherDetailTable tr[role="row"]').each(function () {
+                count++;
+            });
+            var rowsCount = count - 1;
+            var vtable = $('#voucherDetailTable').DataTable();
+            var totalDebit = 0;
+            var totalCredit = 0;
+            for (irow = 0; irow < rowsCount; irow++) {
+                var data = vtable.row(irow).data();
+                var netDebit = ReplaceCommas(data[14].split('value=')[1].split('/>')[0].trim());
+                var netCredit = ReplaceCommas(data[15].split('value=')[1].split('/>')[0].trim());
+                totalDebit += parseFloat(netDebit);
+                totalCredit += parseFloat(netCredit);
+            }
+            var mainCredit = $('#Credit').val();
+            if (mainCredit == '' || mainCredit == null || isNaN(mainCredit)) {
+                mainCredit = 0;
+            }
+            var currencyValue = $('#CurrencyValue').val();
+            if (currencyValue == '' || currencyValue == null) {
+                currencyValue = 0;
+            }
+            var exchangeRate = $('#ExchangeRate').val();
+            if (exchangeRate == '' || exchangeRate == null) {
+                exchangeRate = 0;
+            }
+            if ($('.CurrencySection').is(":visible")) {
+                if ($('#CurrencyCalculation').val() == "Multiply") {
+                    mainCredit = parseFloat(currencyValue) * parseFloat(exchangeRate);
+                }
+                else {
+                    mainCredit = parseFloat(currencyValue) / parseFloat(exchangeRate);
+                }
+                $('#Credit').val(mainCredit);
+            }
+            totalCredit += parseFloat(mainCredit);
+            $('#TotalDebit').html(ReplaceNumberWithCommas(totalDebit.toFixed(2)));
+            $('#TotalCredit').html(ReplaceNumberWithCommas(totalCredit.toFixed(2)));
+        }
+
+
+
+        $('#CurrencyId1').change(function () {  // hide currency exchange and currency credit when changed the currency dropdown
+            var currencyId = $(this).val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/cashpayment/GetExchangeRate/' + currencyId,
+                dataType: 'json',
+                success: function (response) {
+                    $('#LineExchangeRate').val(response.currencyId);
+                    //$('#LineDebit').val('');
+                    //$('#CurrencyDebitSection').val('');
+                    lowerDebitCredit();
+                }
+            })
+
+        })
+        function lowerDebitCredit() {
+            var currencyValue = $('#LineCurrencyDebit').val();
+            if (currencyValue == '' || currencyValue == null) {
+                currencyValue = 0;
+            }
+
+            var currencyValue2 = $('#LineCurrencyCredit').val();
+            if (currencyValue2 == '' || currencyValue2 == null) {
+                currencyValue2 = 0;
+            }
+            var exchangeRate = $('#LineExchangeRate').val();
+            if (exchangeRate == '' || exchangeRate == null) {
+                exchangeRate = 0;
+            }
+
+            var mainDebit = parseFloat(currencyValue) * parseFloat(exchangeRate);
+            var mainCredit = parseFloat(currencyValue2) * parseFloat(exchangeRate);
+            $('#LineDebit').val(mainDebit);
+            $('#LineCredit').val(mainCredit);
+
+            getTaxValue();
+            //totalDebit += parseFloat(mainDebit);
+            //totalCredit += parseFloat(mainCredit);
+        }
+
+        $('#CurrencyId').change(function () {  // hide currency exchange and currency credit when changed the currency dropdown
+            //getToatalCredit();
+            var currencyId = $(this).val();
+
+            $('#CurrencyId1').val(null).trigger('change');
+            if ($('#CurrencyId1').find("option[value='" + $(this).val() + "']").length) {
+                $('#CurrencyId1').val($(this).val()).trigger('change');
+
+            } else {
+
+                    // Create a DOM Option and pre-select by default
+                    var newOption = new Option($('#CurrencyId option:selected').text(), $(this).val(), true, true);
+                    // Append it to the select
+                $('#CurrencyId1').append(newOption).trigger('change');
+                $('#CurrencyId1').attr('disabled', 'disabled');
+
+               // $('#btn_Save').prop('disabled', false);
+                }
+
+            $.ajax({
+                type: 'POST',
+                url: '/cashpayment/GetExchangeRate/' + currencyId,
+                dataType: 'json',
+                success: function (response) {
+                    $('#ExchangeRate').val(response.currencyId);
+                    //$('#Credit').val('');
+                    //$('#CurrencyCredit').val('');
+                    //$("#Credit").attr('readonly', 'readonly');
+                    upperCredit();
+
+                }
+            })
+
+
+        })
+        function upperCredit() {
+
+
+            var currencyValue = $('#CurrencyCredit').val();
+            if (currencyValue == '' || currencyValue == null) {
+                currencyValue = 0;
+            }
+
+
+            //alert(currencyValue);
+            var exchangeRate = $('#ExchangeRate').val();
+            if (exchangeRate == '' || exchangeRate == null) {
+                exchangeRate = 0;
+            }
+            var mainCredit = parseFloat(currencyValue) * parseFloat(exchangeRate);
+
+            $("#Credit").val(mainCredit);
+
+            var count = 0;
+            $('#voucherDetailTable tr[role="row"]').each(function () {
+                count++;
+            });
+
+            var rowsCount = count - 1;
+            var vtable = $('#voucherDetailTable').DataTable();
+            var totalCredit = 0;
+            for (irow = 0; irow < rowsCount; irow++) {
+                var data = vtable.row(irow).data();
+                var netCredit = ReplaceCommas(data[15].split('value=')[1].split('/>')[0].trim());
+                totalCredit += parseFloat(netCredit);
+            }
+            totalCredit = totalCredit + mainCredit;
+            $('#TotalCredit').html(ReplaceNumberWithCommas(parseFloat(totalCredit).toFixed(2)));
+        }
+
+
+        function todayDate() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var h = today.getHours();
+            var m = today.getMinutes();
+            if (h < 10) h = '0' + h;
+            if (m < 10) m = '0' + m;
+            var today = yyyy + '-' + mm + '-' + dd + 'T' + h + ':' + m;
+            $("#VoucherDate").val(today);
+        }
+
+
+
+</script>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+</script>

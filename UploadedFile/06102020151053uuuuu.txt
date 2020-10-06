@@ -1,0 +1,537 @@
+@model List<PharmacyERP.Areas.Admin.Models.clsModule>
+
+@foreach (clsModule u in Model)
+{
+
+    <input type="hidden" class="UserId" value="@u.UserId" />
+    <input type="hidden" class="ModuleId" value="@u.ModuleId" />
+}
+
+
+
+<style>
+
+    input[type=checkbox] + label {
+        display: block;
+        margin: 0.2em;
+        cursor: pointer;
+        padding: 0.2em;
+    }
+
+    input[type=checkbox] {
+        display: none;
+    }
+
+        input[type=checkbox] + label:before {
+            content: "\2714";
+            border: 0.1em solid #000000;
+            border-radius: 0.2em;
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            padding-left: 0.2em;
+            padding-bottom: 0.3em;
+            margin-right: 0.2em;
+            vertical-align: bottom;
+            background-color: #ffffff;
+            color: transparent;
+            transition: .2s;
+        }
+
+        input[type=checkbox] + label:active:before {
+            transform: scale(0);
+        }
+
+        input[type=checkbox]:checked + label:before {
+            background-color: #ffffff;
+            border-color: #ffffff;
+            color: #000;
+        }
+
+    .tree li.parent_li > span:hover {
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+        color: #fff;
+    }
+</style>
+<div class="alertDiv2">
+
+</div>
+@if (Model.Count() == 0)
+{
+    <center>
+        <h3>No module found.</h3>
+    </center>
+}
+else
+{
+    <div class="row">
+        <div class="col col-md-3">
+            <table class="" style="">
+                <tr>
+                    <td style="width: 50%; padding-right: 3px; padding-left: 3px" id="">
+                        <a href="javascript:void(0);" class="btn btn-success selectAllBtn" title="Select All" style=" text-align: center;font-size: 12px;margin-bottom:10px;padding:4px;color:#fff !important;border-radius:2px ">
+                            Select All
+                        </a>
+                    </td>
+                    <td style="width: 50%;; padding-left: 3px; " id="">
+                        <a href="javascript:void(0);" class="btn btn-warning clearAllBtn" title="Clear All" style=" text-align: center;font-size: 12px;margin-bottom:10px;padding:4px;color:#fff !important;border-radius:2px ">
+                            Clear All
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="col col-md-8">
+
+        </div>
+        <div class="col col-md-1 pull-right">
+            <a href="javascript:void(0);" class="btn btn-primary saveRoleBtn pull-right" title="Save" style=" text-align: center;font-size: 12px;height:30px;width:55px;margin-bottom:10px;padding:4px;color:#fff !important;background-color:#428bca !important;border-color:#357ebd !important;border-radius:2px ">
+                Save
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <table>
+            <tr class="data-row">
+                <td class="Id">1</td>
+                <td class="Name">Awais</td>
+            </tr>
+            <tr class="data-row">
+                <td class="Id">2</td>
+                <td class="Name">Ali</td>
+            </tr>
+            <tr class="data-row">
+                <td class="Id">3</td>
+                <td class="Name">Zain</td>
+            </tr>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col col-md-1">
+        </div>
+        <div class="col col-md-10">
+            <div style="border:2px solid #ddd;background-color:#FFFFF0;padding:10px;width:100%;margin-bottom:15px;border-radius:5px">
+                <div class="widget-body AllModules" style="">
+                    <div class="tree smart-form">
+                       
+
+                        @*<ul>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (clsModule u in Model)
+                            {
+                                i++;
+                                string checkModule = "";
+                                if (u.AllActions == "Yes")
+                                {
+                                    checkModule = "checked";
+                                }
+
+                                string id = "module" + i;
+                                int j = 0;
+                                <li class="ModuleList">
+                                    <span style="background-color:#CF564A;color:white;width:96%">
+                                        <input type="hidden" class="UserId" value="@u.UserId" />
+                                        <input type="hidden" class="ModuleId" value="@u.ModuleId" />
+                                        <input type="checkbox" id="@id" class="moduleCheckbox" @checkModule />
+                                        <label for="@id" style="margin-right: 3px;float: left;"></label>
+                                        <b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important;width:190px">@u.ModuleName</b>
+                                    </span>
+
+
+                                    <ul>
+
+                                        @foreach (clsModule m in u.ActionList)
+                                        {
+                                            j++;
+                                            string checkAction = "";
+                                            if (m.UserRoleId > 0)
+                                            {
+                                                checkAction = "checked";
+                                            }
+                                            string id2 = "action" + i + j;
+                                            <li style="display:none" class="ActionList">
+                                                <span style="background-color:#02547D;color:white">
+                                                    <input type="hidden" class="ActionId" value="@m.ActionId" />
+                                                    <input type="checkbox" id="@id2" class="actionCheckbox" @checkAction />
+                                                    <label for="@id2" style="margin-right: 3px;float: left;"></label>
+                                                    <b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important">@m.ActionName</b>
+                                                </span>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </li>
+                            }
+                        </ul>*@
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-1">
+
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        //var ModuleArray = ["Module1", "Module2", "Module3", "Module4", "Module5"];
+
+
+        //$.each(ModuleArray, function (index, value) {
+
+        //    $(".tree").append(index + ": " + value + '<br>');
+        //});
+
+
+       
+        TreeView();
+
+       
+
+
+
+
+
+        //$('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+        $('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Collapse this branch').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(':visible')) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').removeClass().addClass('fa fa-lg fa-plus-circle');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
+            }
+            e.stopPropagation();
+        });
+
+    })
+
+
+
+    function TreeView() {
+
+
+
+        var list = '<ul>' +
+            '<li class="ModuleList">' +
+            '<span style="background-color:#CF564A;color:white;width:96%">' +
+            '<input type="hidden" class="UserId" value="" />' +
+            '<input type="hidden" class="ModuleId" value="" />' +
+            '<input type="checkbox" id="moduleCheckbox" class="moduleCheckbox" />' +
+            '<label for="" style="margin-right: 3px;float: left;"></label>' +
+            '<b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important;width:190px" class="ModuleName">Module Name</b>' +
+            '</span>' +
+
+            '<ul>' +
+
+            '<li style="display:none" class="ActionList">' +
+            '<span style="background-color:#02547D;color:white">' +
+
+            '<input type="hidden" class="ActionId" value="" />' +
+            '<input type="checkbox" id="" class="actionCheckbox"  />' +
+            '<label for="" style="margin-right: 3px;float: left;">Module 1.1 </label>' +
+            '<b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important"></b>' +
+            '</span>' +
+
+
+            '<ul>' +
+
+            '<li style="display:none" class="ActionList">' +
+            '<span style="background-color:#02547D;color:white">' +
+
+            '<input type="hidden" class="ActionId" value="" />' +
+            '<input type="checkbox" id="" class="actionCheckbox"  />' +
+            '<label for="" style="margin-right: 3px;float: left;">Module 1.1.1 </label>' +
+            '<b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important"></b>' +
+            '</span>' +
+
+            '<ul>' +
+
+            '<li style="display:none" class="ActionList">' +
+            '<span style="background-color:#02547D;color:white">' +
+
+            '<input type="hidden" class="ActionId" value="" />' +
+            '<input type="checkbox" id="" class="actionCheckbox"  />' +
+            '<label for="" style="margin-right: 3px;float: left;">Module 1.1.1.1 </label>' +
+            '<b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important"></b>' +
+            '</span>' +
+
+
+
+
+            '<ul>' +
+
+            '<li style="display:none" class="ActionList">' +
+            '<span style="background-color:#02547D;color:white">' +
+
+            '<input type="hidden" class="ActionId" value="" />' +
+            '<input type="checkbox" id="" class="actionCheckbox"  />' +
+            '<label for="" style="margin-right: 3px;float: left;">Module 1.1.1.1.1 </label>' +
+            '<b style="float:left;margin-top:6px;margin-right:3px;text-decoration:none!important"></b>' +
+            '</span>' +
+
+            '</li>' +
+
+            '</ul>' +
+
+
+            '</li>' +
+
+
+
+            '</ul>' +
+
+
+
+
+            '</li>' +
+
+
+
+
+
+            '</ul>' +
+
+
+            '</li>' +
+
+
+            '</ul>' +
+            '</li>' +
+
+
+            '</ul>'
+
+
+        $('.tree').html(list);
+
+    }
+
+
+
+    function getAllData2() {
+        var jsonArray = new Array();
+        $('.data-row').each(function () {
+            //////First JSon List///////
+
+            var id1 = $(this).find('.Id').text();
+            var name1 = $(this).find('.Name').text();
+            var jsonArray2 = new Array();
+            $('.data-row').each(function () {
+                //////Second JSon List///////
+
+                var id2 = $(this).find('.Id').text();
+                var name2 = $(this).find('.Name').text();
+                var jsonArray3 = new Array();
+                $('.data-row').each(function () {
+                    //////Third JSon List///////
+
+                    var id3 = $(this).find('.Id').text();
+                    var name3 = $(this).find('.Name').text();
+                    var jsonArray4 = new Array();
+
+
+                    $('.data-row').each(function () {
+                        //////Fourth JSon List///////
+
+                        var id4 = $(this).find('.Id').text();
+                        var name4 = $(this).find('.Name').text();
+                        var jsonArray5 = new Array();
+
+                        $('.data-row').each(function () {
+                            //////Fifth JSon List///////
+
+                            var id5 = $(this).find('.Id').text();
+                            var name5 = $(this).find('.Name').text();
+                            //var jsonArray6 = new Array();
+
+
+                            var fifthJson = {
+                                Id: id5,
+                                Name: name5,
+                                //child: jsonArray5
+                            }
+                            jsonArray5.push(fifthJson);
+
+
+                        })
+
+
+                        var fourthJson = {
+                            Id: id4,
+                            Name: name4,
+                            child: jsonArray5
+                        }
+                        jsonArray4.push(fourthJson);
+
+
+                    })
+
+
+
+
+                    var thirdJson = {
+                        Id: id3,
+                        Name: name3,
+                        child: jsonArray4
+                    }
+                    jsonArray3.push(thirdJson);
+
+
+                })
+                    var secondJson = {
+                        Id: id2,
+                        Name: name2,
+                        child: jsonArray3
+                    }
+
+                    jsonArray2.push(secondJson);
+                })
+                var firstJson = {
+                    Id: id1,
+                    Name: name1,
+                    child: jsonArray2
+                }
+
+                jsonArray.push(firstJson);
+            })
+            return jsonArray;
+        }
+
+
+   
+
+
+
+
+    function getAllData2() {
+        var jsonArray = new Array();
+        $('.data-row').each(function () {
+            //////First JSon List///////
+
+            var id1 = $(this).find('.Id').text();
+            var name1 = $(this).find('.Name').text();
+            var jsonArray2 = new Array();
+            $('.data-row').each(function () {
+                //////Second JSon List///////
+                var id2 = $(this).find('.Id').text();
+                var name2 = $(this).find('.Name').text();
+                var jsonArray3 = new Array();
+                $('.data-row').each(function () {
+                    //////Third JSon List///////
+                    var id3 = $(this).find('.Id').text();
+                    var name3 = $(this).find('.Name').text();
+                    var thirdJson = {
+                        Id: id3,
+                        Name: name3,
+                        //ModuleRoleList: moduleList
+                    }
+
+                    jsonArray3.push(thirdJson);
+                })
+
+                var secondJson = {
+                    Id: id2,
+                    Name: name2,
+                    child: jsonArray3
+                }
+
+                jsonArray2.push(secondJson);
+            })
+            var firstJson = {
+                Id: id1,
+                Name: name1,
+                child: jsonArray2
+            }
+
+            jsonArray.push(firstJson);
+        })
+        return jsonArray;
+    }
+    $('.saveRoleBtn').click(function () {
+      
+        var abc = JSON.stringify(getAllData2());
+        $.ajax({
+
+            type: "POST",
+            url: "/UserRole/InsertUpdateModuleDummy/",
+            data: { 'abc': abc },
+            dataType: 'json',
+            success: function (data) {
+                    location.reload();
+                }
+            })
+  
+
+
+
+
+    })
+
+
+
+    $(document).on('change', '.moduleCheckbox', function () {
+
+
+
+
+        var check = $(this).is(':checked');
+        if (check == true) {
+            $(this).parents('.ModuleList').find('input[type=checkbox]').prop('checked', true);
+        }
+        else {
+            $(this).parents('.ModuleList').find('input[type=checkbox]').prop('checked', false);
+        }
+    })
+    $(document).on('change', '.actionCheckbox', function () {
+        var checkCampus = $(this).is(':checked');
+        if (checkCampus == true) {
+            $(this).parents('.ActionList').find('input[type=checkbox]').prop('checked', true);
+        }
+        else {
+            $(this).parents('.ActionList').find('input[type=checkbox]').prop('checked', false);
+        }
+        var checked = 0;
+        $(this).parents('.ModuleList').find('.actionCheckbox').each(function () {
+            var check = $(this).is(':checked');
+            if (check == false) {
+                checked += 1;
+            }
+        })
+        if (checked > 0) {
+            $(this).parents('.ModuleList').find('.moduleCheckbox').prop('checked', false);
+        }
+        else {
+            $(this).parents('.ModuleList').find('.moduleCheckbox').prop('checked', true);
+        }
+    })
+    $('.selectAllBtn').click(function () {
+        $('.AllModules').find('input[type=checkbox]').prop('checked', true);
+    })
+    $('.clearAllBtn').click(function () {
+        $('.AllModules').find('input[type=checkbox]').prop('checked', false);
+    })
+
+
+
+
+
+
+    $(document).keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            event.preventDefault();
+        }
+    });
+</script>
